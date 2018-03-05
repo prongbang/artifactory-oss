@@ -1,0 +1,24 @@
+version: '2'
+services:
+  artifactory-oss:
+    image: docker.bintray.io/jfrog/artifactory-oss:5.8.3
+    container_name: artifactory-oss
+    ports:
+     - 8081:8081
+    volumes:
+     - ./data/artifactory:/var/opt/jfrog/artifactory
+     - ./data/etc/artifactory:/etc/opt/jfrog/artifactory
+     - ./conf/db.properties:/artifactory_extra_conf/db.properties
+     - ./conf/binarystore.xml:/artifactory_extra_conf/binarystore.xml
+     
+#    Add extra Java options by uncommenting the following lines
+    environment:
+      - EXTRA_JAVA_OPTIONS=-Xmx4g
+      # - DOCKER_HOST=localhost:2375
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    restart: always
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 32000
+        hard: 40000
